@@ -3,36 +3,27 @@
  * @return {boolean}
  */
 var validMountainArray = function(arr) {
-    if(!arr || arr.length < 3 || arr[0] >= arr[1]) return false;
+  if(!arr || arr.length < 3 || arr[0] >= arr[1]) return false;
   
-  // one pass, flip the mode as soon as the first decrease is found
-  // if reach the end, return true, if another increase or duplicate is found return false
+  let i = 0;
   
-  let mode = 'inc';
-  let hasFlipped = false;
-  let prev;
-  
-  for(let i = 1; i < arr.length; i++) {
-    prev = arr[i - 1];
-    
-    if(mode === 'inc') {
-     if(arr[i] < prev) {
-       mode = 'dec';
-       hasFlipped = true;
-     }
-      if(arr[i] === prev) {
-        return false;
-      }
-    } else {
-     if(arr[i] >= prev) {
-       return false; 
-     }
-    }
-    
+  // find the peak (first decrease)
+  while(arr[i] !== undefined && arr[i+1] !== undefined && arr[i] < arr[i+1]) {
+     i++; 
   }
   
-  if(mode === 'inc' || !hasFlipped) return false;
+  // if we're at the beginning or the end, cant be a mountain
+  if(i === 0 || i >= arr.length - 1) {
+    return false;
+  }
   
-return true;
+  // validate the descent
+  while(arr[i] !== undefined && arr[i+1] != undefined) {
+    if(arr[i+1] >= arr[i]) {
+      return false;
+    }
+    i++;
+  }
 
+  return true;
 };
